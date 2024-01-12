@@ -36,14 +36,14 @@ public class StepDefinitions {
         requestBody.put("name", "Route to nowhere");
         requestBody.put("notes", "It's a long long way");
 
-//        TripPoint start = new TripPoint(BigDecimal.valueOf(53.9628), BigDecimal.valueOf(2.0163)
-//        , 100, LocalDateTime.now());
-//        TripPoint finish = new TripPoint(BigDecimal.valueOf(51.1472), BigDecimal.valueOf(2.0475)
-//                , 105, LocalDateTime.now());
-//
-//        Trip trip = new Trip(Arrays.asList(start, finish));
-//
-//        requestBody.put("trips", Arrays.asList(trip));
+        TripPoint start = new TripPoint(BigDecimal.valueOf(53.9628), BigDecimal.valueOf(2.0163)
+        , 100, LocalDateTime.now());
+        TripPoint finish = new TripPoint(BigDecimal.valueOf(51.1472), BigDecimal.valueOf(2.0475)
+                , 105, LocalDateTime.now());
+
+        Trip trip = new Trip(Arrays.asList(start, finish));
+
+        requestBody.put("trips", Arrays.asList(trip));
 
         response = request.body(requestBody.toString())
                 .post("/");
