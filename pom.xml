@@ -35,7 +35,7 @@
         <dependency>
             <groupId>uk.co.tyke.travellog</groupId>
             <artifactId>journey.model</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
+            <version>1.0.5-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -75,6 +75,12 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20231013</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.12</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 
