@@ -1,4 +1,4 @@
-package uk.co.tyke.travellog.cucumber;
+package uk.co.tyke.travellog.cucumber.journey;
 
 import io.cucumber.java.en.*;
 
@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 
 public class StepDefinitions {
 
-    private static final String BASE_URL = "http://localhost:8080/journey";
+    private static final String JOURNEY_URL = "http://localhost:8081/journey";
 
     private static Response response;
 
@@ -31,7 +31,7 @@ public class StepDefinitions {
     @When("I save the journey")
     public void i_save_the_journey() {
         // Call the save journey endpoint
-        RestAssured.baseURI = BASE_URL;
+        RestAssured.baseURI = JOURNEY_URL;
         RequestSpecification request = RestAssured.given();
         request.header("Content-Type", "application/json");
 
