@@ -5,7 +5,9 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
+import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -19,7 +21,7 @@ import java.time.LocalDateTime;
 
 public class StepDefinitions {
 
-    private static final String USER_URL = "http://localhost:8090/user";
+    private static final String USER_URL = "http://localhost:8090/";
 
     private static RequestSpecification request;
     private static Response response;
@@ -39,20 +41,34 @@ public class StepDefinitions {
         request.header("Content-Type", "application/json");
 
         // Master IT user logs in
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("username", "master.it@tyke.co.uk");
-        requestBody.put("password", "Passw0rd");
-
-        logger.debug(requestBody.toString());
-
-        response = request.body(requestBody.toString())
-                .post("http://localhost:8090/login");
+        JSONObject masterUserLoginBody = new JSONObject();
+        masterUserLoginBody.put("username", "master.it@tyke.co.uk");
+        masterUserLoginBody.put("password", "P@ssw0rd");
+        response = request.body(masterUserLoginBody.toString())
+                .post("login");
 
         i_will_see_a_HTTP_OK_response();
 
+        // Get access token and create header
+        JsonPath json = response.jsonPath();
+        String accessToken = json.get("access_token");
 
+        String authorizationHeader = "BEARER " + accessToken;
+        request.header("Authorization", authorizationHeader);
 
-    }
+        // Create a new user
+        JSONObject createUserBody = new JSONObject();
+
+        createUserBody.put("fi", "test001");
+        createUserBody.put("la", "it");
+        createUserBody.put("co", "UK");
+        createUserBody.put("em", "test001.it@tyke.co.uk");
+        createUserBody.put("pw", "P@ssw0rd");
+        response = request.body(createUserBody.toString())
+                .post("user");
+
+        i_will_see_a_HTTP_CREATED_response();
+   }
 
     @Given("A user is logged in")
     public void a_user_is_logged_in() {
@@ -78,11 +94,15 @@ public class StepDefinitions {
         logger.debug(requestBody.toString());
 
         response = request.body(requestBody.toString())
-                .post("");
+                .post("user");
     }
     @Then("I will see a HTTP OK response")
     public void i_will_see_a_HTTP_OK_response() {
         Assertions.assertEquals(200, response.getStatusCode(), "Expected HTTP OK (200)");
+    }
+
+    public void i_will_see_a_HTTP_CREATED_response() {
+        Assertions.assertEquals(201, response.getStatusCode(), "Expected HTTP CREATED (204)");
     }
 
 }
