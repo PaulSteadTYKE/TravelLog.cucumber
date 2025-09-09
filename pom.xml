@@ -13,6 +13,12 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+<!--    <parent>-->
+<!--        <groupId>uk.co.tyke</groupId>-->
+<!--        <artifactId>travellog.parent.data</artifactId>-->
+<!--        <version>0.0.1-SNAPSHOT</version>-->
+<!--    </parent>-->
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -33,11 +39,21 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
+            <groupId>uk.co.tyke</groupId>
+            <artifactId>travellog.user.model</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
             <groupId>uk.co.tyke.travellog</groupId>
             <artifactId>journey.model</artifactId>
             <version>1.0.9-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>uk.co.tyke</groupId>-->
+<!--            <artifactId>travellog.user.data.postgres</artifactId>-->
+<!--            <version>0.0.1-SNAPSHOT</version>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>

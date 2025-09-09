@@ -9,15 +9,16 @@ import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import io.restassured.response.ResponseBody;
 import io.restassured.specification.RequestSpecification;
-import org.json.JSONArray;
+//import jakarta.inject.Inject;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+//import uk.co.tyke.travellog.user.data.UserData;
+//import uk.co.tyke.travellog.user.data.postgres.UserPostgresImpl;
 //import uk.co.tyke.travellog.journey.model.Location;
 //
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+
 
 public class StepDefinitions {
 
@@ -55,6 +56,14 @@ public class StepDefinitions {
 
         String authorizationHeader = "BEARER " + accessToken;
         request.header("Authorization", authorizationHeader);
+
+        response = request.get("user/itFirstName");
+        String resString = response.prettyPrint();
+        System.out.println("Response Details : " + resString);
+
+        ResponseBody<?> body = response.getBody();
+        String bodyStr = body.toString();
+
 
         // Create a new user
         JSONObject createUserBody = new JSONObject();
