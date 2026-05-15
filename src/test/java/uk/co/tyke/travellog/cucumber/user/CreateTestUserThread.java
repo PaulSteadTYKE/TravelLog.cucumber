@@ -27,7 +27,7 @@ public class CreateTestUserThread implements Runnable {
         // Master IT user logs in
         JSONObject masterUserLoginBody = new JSONObject();
         masterUserLoginBody.put("username", "master.it@tyke.co.uk");
-        masterUserLoginBody.put("password", "P@ssw1rd");
+        masterUserLoginBody.put("password", "P@ssw0rd");
         response = request.body(masterUserLoginBody.toString())
                 .post("login");
         String authorizationHeader = getAuthorizationHeader(response);

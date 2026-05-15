@@ -10,9 +10,12 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
 import org.json.JSONObject;
-import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class StepDefinitions {
 
@@ -62,32 +65,53 @@ public class StepDefinitions {
         logger.debug("authorizationHeader {}", authorizationHeader);
    }
 
+   @When("I change password with an incorrect original password")
+   public void i_change_password_with_an_incorrect_original_password() {
+       changePassword("incorrect", "P@ssw1rd");
+   }
+
     @When("I change the password")
     public void i_change_the_password() {
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("op", "P@ssw0rd");
-        requestBody.put("np", "P@ssw1rd");
-        request.header("Authorization", authorizationHeader);
-
-        logger.debug(requestBody.toString());
-
-        response = request.body(requestBody.toString())
-                .put("user/password");
+        changePassword("P@ssw0rd", "P@ssw1rd");
     }
 
     @Then("I will see a HTTP OK response")
     public void i_will_see_a_HTTP_OK_response() {
-        Assertions.assertEquals(200, response.getStatusCode(), "Expected HTTP OK (200)");
+        assertEquals(200, response.getStatusCode(), "Expected HTTP OK (200)");
+    }
+
+    @Then("I will see a PASSWORD_NOT_CORRECT error")
+    public void i_will_see_a_PASSWORD_NOT_CORRECT_error() {
+        assertEquals(422, response.getStatusCode(), "PASSWORD_NOT_CORRECT error");
+        JsonPath jsonPath = response.jsonPath();
+
+        int length = jsonPath.get("errors.size()");
+        assertEquals(1, length, "Expected one error");
+
+        int code = jsonPath.get("errors.error[0].code");
+        assertEquals(1002, code, "Expected 1002 error");
     }
 
     public void i_will_see_a_HTTP_CREATED_response() {
-        Assertions.assertEquals(201, response.getStatusCode(), "Expected HTTP CREATED (204)");
+        assertEquals(201, response.getStatusCode(), "Expected HTTP CREATED (204)");
     }
 
     private String getAuthorizationHeader (Response response) {
         JsonPath json = response.jsonPath();
         String accessToken = json.get("access_token");
         return "BEARER " + accessToken;
+    }
+
+    private void changePassword(String originalPassword, String newPassword) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("op", originalPassword);
+        requestBody.put("np", newPassword);
+        request.header("Authorization", authorizationHeader);
+
+        logger.debug(requestBody.toString());
+
+        response = request.body(requestBody.toString())
+                .put("user/password");
     }
 
 }
